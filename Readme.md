@@ -34,6 +34,7 @@ GLSLの学習向けに用意したサンプルプログラム集。
 + GLFW 3.2.1
 + GLEW
 + stb_image 2.14
++ glm 0.9.8.4
 
 ## License
 License All source code files are licensed under the MPLv2.0 license
