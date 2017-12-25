@@ -76,31 +76,67 @@ int main() {
   GLuint texture_id = createTexture("earth_1.png");
 
   // シェーダーを読み込んで準備
-  GLuint program = Shader::read("sample");
-
-  // シェーダー発動
-  Shader::use(program);
+  GLuint program   = Shader::read("sample");
+  GLuint fill_prog = Shader::read("fill");
 
   glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
 
   float r = 0.0;
 
-  // 透視変換表列を用意
-  glm::mat4 proj = glm::perspective(glm::radians(35.0),  // 視野角
-                                    800.0 / 600.0,       // 縦横比
-                                    0.2, 20.0);          // near-z, far-z
+  // 「描画バッファ」のフレームバッファ識別子を
+  // OpenGLに教えてもらう※後で使う
+  GLint current_framebuffer;
+  glGetIntegerv(GL_FRAMEBUFFER_BINDING, 
+                &current_framebuffer);
 
-  glEnable(GL_DEPTH);         // 深度バッファON
-  glEnable(GL_CULL_FACE);     // 裏面描画OFF
+  // オフスクリーンバッファを用意
+  GLuint fbo_texture_id;
+  glGenTextures(1, &fbo_texture_id);
+  glBindTexture(GL_TEXTURE_2D, fbo_texture_id);
+
+  glTexImage2D(GL_TEXTURE_2D, 
+               0, GL_RGB, 1024, 1024, 
+               0, GL_RGB, GL_UNSIGNED_BYTE, 0);
+  // 拡大縮小時のフィルタを指定
+  glTexParameteri(GL_TEXTURE_2D, 
+                  GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+  glTexParameteri(GL_TEXTURE_2D, 
+                  GL_TEXTURE_MAG_FILTER, GL_NEAREST);  
+
+  // オフスクリーンバッファ用の
+  // フレームバッファ識別子を
+  // １つ作る
+  GLuint framebuffer_id;
+  glGenFramebuffers(1, &framebuffer_id);  
+  glBindFramebuffer(GL_FRAMEBUFFER, framebuffer_id);
+
+  // フレームバッファにテクスチャを拘束  
+  glFramebufferTexture2D(GL_FRAMEBUFFER, 
+                         GL_COLOR_ATTACHMENT0, 
+                         GL_TEXTURE_2D, 
+                         fbo_texture_id, 0);
+
+  // 透視変換表列を用意
+  glm::mat4 proj = glm::perspective(glm::radians(35.0),    // 視野角
+                                    800.0 / 600.0,         // 縦横比
+                                    0.2, 20.0);            // near-z, far-z
 
   while (!glfwWindowShouldClose(window))
   {
-    // フレームバッファの内容を消去1
+    // オフスクリーン用のフレームバッファを拘束
+    glBindFramebuffer(GL_FRAMEBUFFER, framebuffer_id);
+
+    glEnable(GL_DEPTH);         // 深度バッファON
+    glEnable(GL_CULL_FACE);     // 裏面描画OFF
+    
+    // フレームバッファの内容を消去
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
     // ビューポート設定
-    // TIPS GLFW初期化時に設定されている
-    // glViewport(0, 0, 640, 480);
+    glViewport(0, 0, 1024, 1024);
+
+    // シェーダー発動
+    Shader::use(program);
 
     // シェーダーへ透視変換行列を送る
     {
@@ -128,7 +164,7 @@ int main() {
       glUniformMatrix3fv(id, 1, GL_FALSE, &m[0][0]);
     }
 
-    r += 0.5;
+    r += 0.25;
 
     // シェーダーへ値を送る
     {
@@ -182,6 +218,60 @@ int main() {
     
     // 描画
     glDrawArrays(GL_TRIANGLES, 0, vtx_num / 3);
+
+    // 画面表示用のフレームバッファを拘束
+    glBindFramebuffer(GL_FRAMEBUFFER, current_framebuffer);
+
+    glDisable(GL_DEPTH);         // 深度バッファOFF
+    glDisable(GL_CULL_FACE);     // 裏面描画ON
+    
+    glViewport(0, 0, 800, 600);
+
+    // シェーダー発動
+    Shader::use(fill_prog);
+    
+    {
+      glActiveTexture(GL_TEXTURE0);
+      glBindTexture(GL_TEXTURE_2D, fbo_texture_id);
+
+      GLint id = Shader::uniform(fill_prog, "uni_texture");
+      glUniform1i(id, 0);       // GL_TEXTURE0を使ってはならない
+    }
+    
+    // 頂点配列をシェーダーへ送る
+    {
+      GLint id = Shader::attrib(fill_prog, "position");
+      glEnableVertexAttribArray(id);
+
+      const float vtx[] = {
+        -1.0, -1.0,
+         1.0, -1.0,
+        -1.0,  1.0,
+
+        -1.0,  1.0,
+         1.0, -1.0,
+         1.0,  1.0,
+      };
+      glVertexAttribPointer(id, 2, GL_FLOAT, GL_FALSE, 0, vtx);
+    }
+    {
+      GLint id = Shader::attrib(fill_prog, "uv");
+      glEnableVertexAttribArray(id);
+
+      const float uv[] = {
+        0.0, 0.0,
+        1.0, 0.0,
+        0.0, 1.0,
+
+        0.0, 1.0,
+        1.0, 0.0,
+        1.0, 1.0,
+      };
+      glVertexAttribPointer(id, 2, GL_FLOAT, GL_FALSE, 0, uv);
+    }
+    
+    // 描画
+    glDrawArrays(GL_TRIANGLES, 0, 6);
 
     glfwSwapBuffers(window);
     glfwPollEvents();
