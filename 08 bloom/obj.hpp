@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 
 //
 // OBJ形式を読む
