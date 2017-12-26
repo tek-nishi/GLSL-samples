@@ -16,6 +16,8 @@
 		477815D81FF0C374004374A9 /* sphere.obj in Resources */ = {isa = PBXBuildFile; fileRef = 477815D71FF0C374004374A9 /* sphere.obj */; };
 		477815DB1FF0D973004374A9 /* fill.fsh in Resources */ = {isa = PBXBuildFile; fileRef = 477815D91FF0D973004374A9 /* fill.fsh */; };
 		477815DC1FF0D973004374A9 /* fill.vsh in Resources */ = {isa = PBXBuildFile; fileRef = 477815DA1FF0D973004374A9 /* fill.vsh */; };
+		477815DF1FF223B1004374A9 /* blur.vsh in Resources */ = {isa = PBXBuildFile; fileRef = 477815DD1FF223B1004374A9 /* blur.vsh */; };
+		477815E01FF223B1004374A9 /* blur.fsh in Resources */ = {isa = PBXBuildFile; fileRef = 477815DE1FF223B1004374A9 /* blur.fsh */; };
 		47CEBF5B1FE8F09E0060C7D3 /* sample.vsh in Resources */ = {isa = PBXBuildFile; fileRef = 47CEBF591FE8F09E0060C7D3 /* sample.vsh */; };
 		47CEBF5C1FE8F09E0060C7D3 /* sample.fsh in Resources */ = {isa = PBXBuildFile; fileRef = 47CEBF5A1FE8F09E0060C7D3 /* sample.fsh */; };
 		47F4C9131FEF9BCC00D2C16D /* libglfw3.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 47F4C9121FEF9BCC00D2C16D /* libglfw3.a */; };
@@ -32,6 +34,8 @@
 		477815D71FF0C374004374A9 /* sphere.obj */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = sphere.obj; sourceTree = "<group>"; };
 		477815D91FF0D973004374A9 /* fill.fsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = fill.fsh; sourceTree = "<group>"; };
 		477815DA1FF0D973004374A9 /* fill.vsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = fill.vsh; sourceTree = "<group>"; };
+		477815DD1FF223B1004374A9 /* blur.vsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = blur.vsh; sourceTree = "<group>"; };
+		477815DE1FF223B1004374A9 /* blur.fsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = blur.fsh; sourceTree = "<group>"; };
 		47CEBF591FE8F09E0060C7D3 /* sample.vsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = sample.vsh; sourceTree = "<group>"; };
 		47CEBF5A1FE8F09E0060C7D3 /* sample.fsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = sample.fsh; sourceTree = "<group>"; };
 		47F4C9121FEF9BCC00D2C16D /* libglfw3.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libglfw3.a; path = OSX/libglfw3.a; sourceTree = "<group>"; };
@@ -62,6 +66,8 @@
 				47CEBF5A1FE8F09E0060C7D3 /* sample.fsh */,
 				477815DA1FF0D973004374A9 /* fill.vsh */,
 				477815D91FF0D973004374A9 /* fill.fsh */,
+				477815DE1FF223B1004374A9 /* blur.fsh */,
+				477815DD1FF223B1004374A9 /* blur.vsh */,
 				477815D51FF0C36E004374A9 /* earth_1.png */,
 				477815D71FF0C374004374A9 /* sphere.obj */,
 				474395661F2DB6370014858F /* Frameworks */,
@@ -150,8 +156,10 @@
 				47CEBF5B1FE8F09E0060C7D3 /* sample.vsh in Resources */,
 				47CEBF5C1FE8F09E0060C7D3 /* sample.fsh in Resources */,
 				477815D81FF0C374004374A9 /* sphere.obj in Resources */,
+				477815E01FF223B1004374A9 /* blur.fsh in Resources */,
 				477815DB1FF0D973004374A9 /* fill.fsh in Resources */,
 				477815D61FF0C36E004374A9 /* earth_1.png in Resources */,
+				477815DF1FF223B1004374A9 /* blur.vsh in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
